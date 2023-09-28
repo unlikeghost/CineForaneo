@@ -1,0 +1,44 @@
+{
+    "peliculas": [
+        {
+            "nombre": "tets",
+            "url": "xs.com",
+            "visto": true
+        },
+        {
+            "nombre": "tets2",
+            "url": "xs.com2",
+            "visto": true
+        },
+        {
+            "nombre": "alan",
+            "url": "alan.com",
+            "visto": true
+        },
+        {
+            "nombre": "jeje",
+            "url": "e",
+            "visto": false
+        },
+        {
+            "nombre": "das",
+            "url": "das",
+            "visto": true
+        },
+        {
+            "nombre": "pelicula",
+            "url": "http://localhost:3000/",
+            "visto": false
+        },
+        {
+            "nombre": "adio",
+            "url": "https://adio.com",
+            "visto": false
+        },
+        {
+            "nombre": "",
+            "url": "",
+            "visto": false
+        }
+    ]
+}
