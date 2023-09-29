@@ -2,7 +2,7 @@ import * as fs from 'fs';
 
 class Database {
     constructor() {
-        this.filename = 'peliculas.json';
+        this.filename = 'data.json';
     }
 
     addMovie(movie) {
