@@ -1,20 +1,15 @@
 import Head from "next/head";
-import "@/styles/App.css";
-import { ChakraProvider } from '@chakra-ui/react'
-
+import "@/styles/app.css";
 
 function MyApp({ Component, pageProps }) {
-	const getLayout = Component.getLayout || ((page) => page);
 
-	return getLayout(
+	return(
 		<>
 			<Head>
 				<title> Ingecine | Viernes de Blockbusters</title>
 			</Head>
-			<ChakraProvider cssVarsRoot='#app'>
-				<title> Ingecine | Viernes de </title>
-				<Component {...pageProps} />
-			</ChakraProvider>
+
+			<Component {...pageProps} />
 		</>
 	);
 }

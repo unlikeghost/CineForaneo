@@ -1,14 +1,15 @@
-import {useState} from 'react';
-import { Input, Button } from "@chakra-ui/react"
+import Swal from 'sweetalert2';
+import { useState } from 'react';
+import LayoutMain from './layout';
 
 export default function Home() {
     const [nombre, setNombre] = useState('');
     const [url, setUrl] = useState('');
 
     const handlerInput = (e) => {
-        if(e.target.name === 'nombre'){
+        if (e.target.name === 'nombre') {
             setNombre(e.target.value);
-        }else if(e.target.name === 'url'){
+        } else if (e.target.name === 'url') {
             setUrl(e.target.value);
         }
     }
@@ -34,25 +35,47 @@ export default function Home() {
         setNombre('');
         setUrl('');
 
-        
+        Swal.fire(
+            {title:'Pelicula agregada a la lista',
+            imageUrl: '/nyan-cat-nyan.gif',
+            text: 'Nos vemos el viernes!'
+            }
+        );
     }
 
-    return(
-        <main>
-            <section >
+    return (
+        <LayoutMain>
+            <section className='formSection'>
                 <form onSubmit={handlerSubmit}>
-                    <div>
+                    <div className='wrapper'>
                         <label htmlFor="nombre">Nombre de la pelicula</label>
-                        <Input type="text" name="nombre" id="nombre" onChange={handlerInput} required/>
+                        <input 
+                            autoFocus
+                            id="nombre"
+                            type="text"
+                            name="nombre"
+                            className='form-control'
+                            onChange={handlerInput} 
+                            value={nombre}
+                            required />
+
                         <label htmlFor="url">URL de la pelicula</label>
-                        <Input name="url" id="url" type="url"
-                        onChange={handlerInput}required/>
+
+                        <input 
+                            id="url" 
+                            name="url" 
+                            type="text"
+                            className='form-control'
+                            onChange={handlerInput} 
+                            value={url}
+                            required
+                            />
                     </div>
-                    <Button type="submit">
+                    <button type="submit" className='btn'>
                         Agregar pelicula
-                    </Button>
+                    </button>
                 </form>
             </section>
-        </main>
+        </LayoutMain>
     )
 }
