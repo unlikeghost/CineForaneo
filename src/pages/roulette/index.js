@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { Input, Button } from "@chakra-ui/react"
+import LayoutMain from '../layout';
+import Link from 'next/link';
+import Swal from 'sweetalert2';
 
 
 export default function Roulette() {
 
-    const [todasLasPeliculas, setTodasLasPeliculas] = useState([]);
     const [pelicula, setPelicula] = useState('');
     const [NoPelicula, setNoPelicula] = useState(false);
 
@@ -20,34 +21,59 @@ export default function Roulette() {
                     setNoPelicula(true);
                     return;
                 }
-                setTodasLasPeliculas(data.map((movie) => movie.nombre));
+                getRandomMovie();
             } catch (err) {
                 console.log(err);
             }
         }
         fetchData();
+
     }, []);
 
     const getRandomMovie = () => {
+        let timerInterval;
         setPelicula(null);
-        fetch('/api/movies', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
+        Swal.fire({
+            imageUrl: '/bh187-spongebob.gif',
+            title: "Espera...",
+            html: 'La pelicula correcta estara lista en <b></b> milisegundos.',
+            timer: 1000,
+            timerProgressBar: true,
+            allowOutsideClick: false,
+            didOpen: () => {
+                Swal.showLoading()
+                const b = Swal.getHtmlContainer().querySelector('b')
+                timerInterval = setInterval(() => {
+                    b.textContent = Swal.getTimerLeft()
+                }, 100)
+            },
+            willClose: () => {
+                clearInterval(timerInterval)
+            }
+        }).then((result) => {
+            /* Read more about handling dismissals below */
+            if (result.dismiss === Swal.DismissReason.timer) {
+                setPelicula(null);
+                fetch('/api/movies', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        if (data.length === 0) {
+                            setNoPelicula(true);
+                            return;
+                        }
+                        const random = Math.floor(Math.random() * data.length);
+                        setPelicula(data[random]);
+                    })
+                    .catch((error) => {
+                        setError(error.message);
+                    });
             }
         })
-            .then((response) => response.json())
-            .then((data) => {
-                if (data.length === 0) {
-                    setNoPelicula(true);
-                    return;
-                }
-                const random = Math.floor(Math.random() * data.length);
-                setPelicula(data[random]);
-            })
-            .catch((error) => {
-                setError(error.message);
-            });
 
     };
 
@@ -68,68 +94,57 @@ export default function Roulette() {
                 setIsLoading(false);
             });
 
+
         router.push('/');
     }
 
-    const goTo = (e) => {
-        const path = e.target.name;
-        console.log(path);
-        if (path === 'roulette') {
-            window.location.reload();
-        }
-        else if (path === 'form') {
-            router.push('/');
-        }
-    };
-
-
     return (
-        <main>
-            <section>
+        <LayoutMain>
+            <section className='roulette'>
                 {pelicula &&
                     <>
-
-                        <div>
-                            <h2> {pelicula.nombre} </h2>
-                            <p> {pelicula.url} </p>
-                        </div>
-                        <div>
-                            <Button onClick={setMovieWatched}>
-                                Marcar como vista
-                            </Button>
-                            <Button name="roulette" onClick={goTo}>
-                                Girar ruleta de nuevo
-                            </Button>
-                        </div>
-                    </>
-
-                }
-                {(!pelicula && !NoPelicula) &&
-                    <>
-                        <div className="roulette">
-                            {todasLasPeliculas.map((pelicula, index) => (
-                                <div className="number"
-                                    key={index}
-                                    style={{ transform: `rotate(${index * (360 / todasLasPeliculas.length)}deg)` }}>
-                                    {pelicula}
+                        <div className='wrapper'>
+                            <div className='showMovie'>
+                                <img src="/bubbles-ppg.gif"></img>
+                                <div>
+                                    <h2> {pelicula.nombre} </h2>
+                                    <Link href={pelicula.url} target="_blank">
+                                        <h3> {pelicula.url} </h3>
+                                    </Link>
                                 </div>
-                            ))}
+                            </div>
+
+                            <div className='button-wrapper'>
+                                <button onClick={setMovieWatched} className='btn'>
+                                    Marcar como vista
+                                </button>
+                                <button className="btn" name="roulette" onClick={getRandomMovie}>
+                                    Girar ruleta de nuevo
+                                </button>
+                            </div>
                         </div>
-                        <Button onClick={getRandomMovie}>
-                            Girar ruleta
-                        </Button>
                     </>
+
                 }
                 {NoPelicula &&
-                    <div>
-                        <h2> No hay peliculas </h2>
-                        <Button name="form" onClick={goTo}>
-                            Agregar pelicula
-                        </Button>
-                    </div>
+                    <>
+                        <div className='showMovie-add'>
+                            <h2>
+                                No tienes peliculas!
+                            </h2>
+                            <img src="/bh187-spongebob (1).gif">
+                            </img>
+
+                            <button className="btn" onClick={() => router.push("/")}>
+                                Agregar peliculas
+                            </button>
+
+                        </div>
+                    </>
                 }
 
             </section>
-        </main>
+        </LayoutMain>
+
     )
 }
