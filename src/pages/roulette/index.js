@@ -51,7 +51,6 @@ export default function Roulette() {
                 clearInterval(timerInterval)
             }
         }).then((result) => {
-            /* Read more about handling dismissals below */
             if (result.dismiss === Swal.DismissReason.timer) {
                 setPelicula(null);
                 fetch('/api/movies', {
@@ -93,7 +92,6 @@ export default function Roulette() {
                 setError(error.message);
                 setIsLoading(false);
             });
-
 
         router.push('/');
     }

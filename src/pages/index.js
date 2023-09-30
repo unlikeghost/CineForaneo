@@ -20,9 +20,7 @@ export default function Home() {
             nombre: nombre,
             url: url,
             visto: false
-        }
-
-        console.log(movie);
+        }        
 
         fetch('/api/movies', {
             method: 'POST',

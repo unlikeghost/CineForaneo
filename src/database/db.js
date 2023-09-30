@@ -1,8 +1,18 @@
 import * as fs from 'fs';
+import path from 'path';
 
 class Database {
     constructor() {
-        this.filename = './src/database/data.json';
+
+        const jsonDirectory = path.join(process.cwd());
+
+        this.filename = path.join(jsonDirectory, 'peliculas.json');
+        try{
+            fs.writeFileSync(this.filename, JSON.stringify({ peliculas: [] }));
+        }
+        catch(err){
+            console.log(err);
+        }
     }
 
     addMovie(movie) {
