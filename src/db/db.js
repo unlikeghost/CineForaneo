@@ -4,7 +4,7 @@ import path from 'path';
 class Database {
     constructor() {
 
-        const jsonDirectory = path.join(process.cwd());
+        const jsonDirectory = path.join(process.cwd(), 'tmp');
 
         this.filename = path.join(jsonDirectory, 'peliculas.json');
         try{

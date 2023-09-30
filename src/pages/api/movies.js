@@ -1,4 +1,4 @@
-import Db from '@/pages/api/db';
+import Db from '@/db/db';
 
 export default async function handler(req, res){
     if (req.method === 'GET') {
