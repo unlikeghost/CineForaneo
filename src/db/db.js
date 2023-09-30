@@ -4,9 +4,8 @@ import path from 'path';
 class Database {
     constructor() {
 
-        const jsonDirectory = path.join(process.cwd(), 'tmp');
-
-        this.filename = path.join(jsonDirectory, 'peliculas.json');
+        // const jsonDirectory = path.join(process.cwd(), 'tmp', 'peliculas.json');
+        this.filename = "/tmp/peliculas.json";
         try{
             fs.writeFileSync(this.filename, JSON.stringify({ peliculas: [] }));
         }
