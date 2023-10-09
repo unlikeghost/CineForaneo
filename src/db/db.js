@@ -4,7 +4,7 @@ import path from 'path';
 class Database {
     constructor() {
 
-        this.filename = "/tmp/peliculas.json";
+        this.filename = "peliculas.json";
         if (!fs.existsSync(this.filename)) {
             fs.writeFileSync(this.filename, JSON.stringify({ peliculas: [] }));
         }
