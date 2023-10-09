@@ -2,7 +2,6 @@
   "name": "ingecine",
   "version": "0.1.0",
   "private": true,
-  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -20,5 +19,8 @@
   "devDependencies": {
     "eslint": "latest",
     "eslint-config-next": "latest"
+  },
+  "engines": {
+      "node": ">=18"
   }
 }
