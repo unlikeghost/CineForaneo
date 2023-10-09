@@ -1,13 +1,10 @@
 import * as fs from 'fs';
-import path from 'path';
+
+let peliculas = require('peliculas.json');
 
 class Database {
     constructor() {
-
-        this.filename = "peliculas.json";
-        if (!fs.existsSync(this.filename)) {
-            fs.writeFileSync(this.filename, JSON.stringify({ peliculas: [] }));
-        }
+        this.filename = 'peliculas.json';
     }
 
     addMovie(movie) {
@@ -17,7 +14,8 @@ class Database {
     }
 
     getMovies() {
-        return JSON.parse(fs.readFileSync(this.filename));
+        return peliculas;
+        // return JSON.parse(fs.readFileSync(this.filename));
     }
 
     getMoviesName() {
