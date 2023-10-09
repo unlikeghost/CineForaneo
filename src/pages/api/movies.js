@@ -2,7 +2,7 @@ import Db from '@/db/db';
 
 export default async function handler(req, res){
     if (req.method === 'GET') {
-        const movies = Db.getMoviesName();
+        const movies = await Db.getMoviesName();
         res.status(200).json(movies);
     } else if (req.method === 'POST') {
         try {

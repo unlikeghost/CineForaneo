@@ -1,42 +1,54 @@
-import * as fs from 'fs';
-
-let peliculas = require('peliculas.json');
+const {client } = require('./mongodb');
 
 class Database {
     constructor() {
-        this.filename = 'peliculas.json';
+        const db = client.db('Peliculas');
+        this.collection = db.collection("Peliculas");
     }
 
-    addMovie(movie) {
-        const movies = this.getMovies();
-        movies.peliculas.push(movie);
-        this.saveMovies(movies);
+    async addMovie(movie) {
+        try {
+            await this.collection.insertOne(movie);
+            console.log('Película agregada a MongoDB');
+        } catch (error) {
+            console.error('Error al agregar película a MongoDB:', error);
+        }
     }
 
-    getMovies() {
-        return peliculas;
-        // return JSON.parse(fs.readFileSync(this.filename));
+    async getMovies() {
+        
+        try {
+            const movies = await this.collection.find({}).toArray();
+            return movies;
+        } catch (error) {
+            console.error('Error al obtener películas de MongoDB:', error);
+            return [];
+        }
     }
 
-    getMoviesName() {
-        const movies = this.getMovies();
-        return movies.peliculas.filter((movie) => !movie.visto).map((movie) => ({
-            nombre: movie.nombre,
-            url: movie.url
-        }));
+    async getMoviesName() {
+        try {
+            const movies = await this.collection.find({ visto: false }).toArray();
+            return movies.map((movie) => ({
+                nombre: movie.nombre,
+                url: movie.url,
+            }));
+        } catch (error) {
+            console.error('Error al obtener películas de MongoDB:', error);
+            return [];
+        }
     }
 
-    setMovieWatched(nombre) {
-        const movies = this.getMovies();
-        const movie = movies.peliculas.find((movie) => movie.nombre === nombre);
-        movie.visto = true;
-        this.saveMovies(movies);
-    }
+    async setMovieWatched(nombre) {
+        try {
 
-    saveMovies(movies) {
-        fs.writeFileSync(this.filename, JSON.stringify(movies));
+            await this.collection.updateOne({ nombre }, { $set: { visto: true } });
+            console.log('Película marcada como vista en MongoDB');
+        } catch (error) {
+            console.error('Error al marcar película como vista en MongoDB:', error);
+        }
     }
 }
 
 const Db = new Database();
-export default Db;
+module.exports = Db;
